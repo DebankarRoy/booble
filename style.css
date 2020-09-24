@@ -1,0 +1,22 @@
+.form-container{
+    background: #ffff;
+    padding: 30px;
+    padding-top: 10px;
+    box-shadow: 0px 0px 3px 0px #85898c;
+}
+.fb,.ggl{
+    box-shadow: 0px 0px 2px 0px #85898c;
+    margin-bottom: 10px;
+}
+.text{
+    font-size: 12px;
+}
+hr{
+    border: 1px solid  #85898c;
+    width: 100%;
+    padding: 0px;
+}
+.nopad{
+    padding:0px !important;
+    width: auto;
+}

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstarrp link -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <!-- own css file -->
+    <link rel="stylesheet" type="text/css" href="style.css">
+<title>Register</title>
+</head>
+<!-- Header -->
+
+    <nav class="navbar navbar-light bg-light">
+        <a class="navbar-brand" href="#">
+        Random
+        </a>
+    </nav>
+<!-- Body part -->
+    <section class="container-fluid" id="user">
+        <section class="row justify-content-center">
+            <section class="col-12 col-sm-3 col-md-4 form-container mt-4">
+                <span  class="row justify-content-center">SIGN UP</span>
+                <br>
+                <span  class="row justify-content-center p-2" style="font-size:25px;">Create your account</span>
+                <span class="row justify-content-center p-2">Lorem ipsum dolor sit amet  sed do</span>
+                <div class="row">
+                    <div class="col-6">
+                        <div class="ggl btn col-12">
+                            <img src="google.png" width="20px" height="20px">
+                            <span class="text">Sign up with Google</span>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="fb btn col-12" onclick="fb_login()">
+                            <img src="facebook.png"  width="20px" height="20px">
+                            <span class="text">Sign up with Facebook</span>
+                        </div> 
+                    </div>
+                </div>
+                <div class="row pl-4">
+                    <div class="nopad col-5"><hr></div>
+                    <div class="nopad col-1 "><span class="pl-2">or</span></div>
+                    <div class="nopad col-5"><hr></div>
+                </div>
+                <form >
+                    <div class="form-group row">
+                        <div class="col-sm-12">
+                        <input type="text" placeholder="First Name" class="form-control" required id="firstname">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-12">
+                        <input type="text" placeholder="last Name" class="form-control" required id="lastname">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-12">
+                        <input type="email" placeholder="Email Address" class="form-control" required id="email">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-12">
+                        <input type="password" placeholder="Password" class="form-control" required id="password">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-12">
+                        <button class="col-sm-12 btn btn-primary" onclick="submituser()">Sign up</button>
+                        </div>
+                    </div>
+                </form>
+            </section>
+        </section>
+    </section>
+
+<!-- FB login script -->
+<script>
+   window.fbAsyncInit = function() {
+      FB.init({
+        appId      : 'put here appid',
+        cookie     : true,
+        xfbml      : true,
+        version    : 'v8.0'
+      });
+         
+    };
+    (function(d, s, id){
+       var js, fjs = d.getElementsByTagName(s)[0];
+       if (d.getElementById(id)) {return;}
+       js = d.createElement(s); js.id = id;
+       js.src = "https://connect.facebook.net/en_US/sdk.js";
+       fjs.parentNode.insertBefore(js, fjs);
+     }(document, 'script', 'facebook-jssdk'));
+
+     function fb_login(){
+        FB.login( function(response) {
+            statusChangeCallback(response);
+        }, { scope: 'email,public_profile' } );
+    }
+
+    function statusChangeCallback(response){
+         if(response.status === 'connected'){
+           console.log('Logged in and authenticated');
+           getinfo();
+         } else {
+           console.log('Not authenticated'); 
+         }
+    }
+
+    function getinfo(){
+        FB.api('/me?fields=first_name,last_name,email', function(response){
+          if(response && !response.error){
+            //console.log(response);
+            builduser(response);
+          }
+          else{
+              alert("error");
+          }
+        });
+    }
+    function builduser(user){
+        let profile = `
+          <h3>Hello ${user.first_name}</h3>
+          <ul class="list-group">
+            <li class="list-group-item">User ID: ${user.id}</li>
+            <li class="list-group-item">Email: ${user.email}</li>
+            <div class="btn btn-primary" onclick=logout()>Logout</div>
+          </ul>
+        `;
+        document.getElementById('user').innerHTML = profile;
+      }
+
+    function logout() {
+        FB.logout(function(response){
+            alert("user is now logged out");
+            location.reload(true);
+        });
+    }
+</script>
+
+<!-- normal form submisson -->
+<script>
+    function submituser(){
+    var name=$('#firstname').val()+" "+$('#lastname').val();
+    var email=$('#email').val();
+    var password=$('#password').val();
+    console.log(name);
+    console.log(password);
+    alert(name+password);
+    alert("going in");
+    $.ajax({
+        type: "POST",
+        url: "https://reqres.in/api/register",
+        data:{ "email":email, "password":password}
+    });
+    }  
+
+</script>
+</html>
